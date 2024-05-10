@@ -56,27 +56,34 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: clothList.length,
-        itemBuilder: (context, index) {
-          final cloth = clothList[index];
-          return ClothTile(
-            cloth: cloth,
-            onIncrement: () {
-              if (cloth.currentWears < cloth.wearCount) {
-                setState(() {
-                  cloth.currentWears++;
-                });
-              }
-            },
-            onReset: () {
-              setState(() {
-                cloth.currentWears = 0;
-              });
-            },
-          );
-        },
-      ),
+      body: clothList.isEmpty
+          ? const Center(
+              child: Text(
+                'Add cloth',
+                style: TextStyle(fontSize: 20),
+              ),
+            )
+          : ListView.builder(
+              itemCount: clothList.length,
+              itemBuilder: (context, index) {
+                final cloth = clothList[index];
+                return ClothTile(
+                  cloth: cloth,
+                  onIncrement: () {
+                    if (cloth.currentWears < cloth.wearCount) {
+                      setState(() {
+                        cloth.currentWears++;
+                      });
+                    }
+                  },
+                  onReset: () {
+                    setState(() {
+                      cloth.currentWears = 0;
+                    });
+                  },
+                );
+              },
+            ),
     );
   }
 }
