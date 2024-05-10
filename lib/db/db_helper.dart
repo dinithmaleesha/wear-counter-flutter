@@ -17,14 +17,14 @@ class DBHelper {
   }
 
   // Insert
-  // Future<int> insertClothingItem(Cloth cloth) async {
-  //   final Database db = await initDatabase();
-  //   return db.insert(
-  //     'clothing_items',
-  //     cloth.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
+  Future<int> insertClothingItem(Cloth cloth) async {
+    final Database db = await initDatabase();
+    return db.insert(
+      'clothing_items',
+      cloth.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 
   // get
   Future<List<Cloth>> getClothingItems() async {

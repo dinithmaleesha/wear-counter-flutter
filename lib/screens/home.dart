@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wear_counter/model/cloth.dart';
 import 'package:wear_counter/widgets/cloth_tile.dart';
+import 'package:wear_counter/db/db_helper.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -9,29 +10,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Cloth> clothList = [
-    Cloth(
-      id: 1,
-      name: 'T-Shirt',
-      imagePath: 'assets/tshirt.png',
-      wearCount: 3,
-      currentWears: 1,
-    ),
-    Cloth(
-      id: 2,
-      name: 'Jeans',
-      imagePath: 'assets/jeans.png',
-      wearCount: 5,
-      currentWears: 2,
-    ),
-    Cloth(
-      id: 3,
-      name: 'Dress Shirt',
-      imagePath: 'assets/shirt.png',
-      wearCount: 4,
-      currentWears: 0,
-    ),
-  ];
+  final DBHelper _dbHelper = DBHelper();
+  List<Cloth> clothList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchClothItems();
+  }
+
+  void _fetchClothItems() async {
+    List<Cloth> cloths = await _dbHelper.getClothingItems();
+    setState(() {
+      clothList = cloths;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
