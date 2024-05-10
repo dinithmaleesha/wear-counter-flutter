@@ -1,0 +1,12 @@
+Title and App Bar Color:
+Deep Blue: RGB(63, 81, 181)
+Button Color:
+Vibrant Orange: RGB(255, 152, 0)
+Background Color:
+Light Gray: RGB(245, 245, 245)
+Tile Background Color:
+White: RGB(255, 255, 255)
+Text Color:
+Black or Very Dark Gray: RGB(33, 33, 33)
+Accent Color:
+Bright Green: RGB(76, 175, 80)
