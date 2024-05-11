@@ -16,6 +16,13 @@ class DBHelper {
     );
   }
 
+  Future<String> getDatabasePath() async {
+    final directory = await getDatabasesPath();
+    final path = join(directory, 'wear_counter.db');
+
+    return path;
+  }
+
   // Insert
   Future<int> insertClothingItem(Cloth cloth) async {
     final Database db = await initDatabase();
@@ -38,6 +45,22 @@ class DBHelper {
         wearCount: maps[i]['wearCount'],
         currentWears: maps[i]['currentWears'],
       );
+    });
+  }
+
+  Future<int?> getRowCount() async {
+    final Database db = await initDatabase();
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT COUNT(*) FROM clothing_items');
+    int? count = Sqflite.firstIntValue(result);
+    return count;
+  }
+
+  Future<void> printAllRows() async {
+    final Database database = await initDatabase();
+    List<Map<String, dynamic>> rows = await database.query('clothing_items');
+    rows.forEach((row) {
+      print('Row: $row');
     });
   }
 }

@@ -28,11 +28,11 @@ class _HomeState extends State<Home> {
   // get all cloths
   void _fetchClothItems() async {
     List<Cloth> cloths = await _dbHelper.getClothingItems();
+    print('Number of cloth items fetched: ${cloths.length}');
     setState(() {
       clothList = cloths;
     });
   }
-
 
   // show add new cloth dialog
   void _showAddClothDialog() {
@@ -144,7 +144,6 @@ class _HomeState extends State<Home> {
                     if (_image != null && newClothName.isNotEmpty) {
                       // Perform insertion logic with image
                       int insertedId = await _dbHelper.insertClothingItem(Cloth(
-                        id: 0,
                         name: newClothName,
                         imagePath: _image!.path,
                         wearCount: newWearCount,
