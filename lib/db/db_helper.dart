@@ -60,6 +60,17 @@ class DBHelper {
     );
   }
 
+  // update
+  Future<int> updateClothingItem(Cloth cloth) async {
+    final Database db = await initDatabase();
+    return await db.update(
+      'clothing_items',
+      cloth.toMap(),
+      where: 'id = ?',
+      whereArgs: [cloth.id],
+    );
+  }
+
   // get row count
   Future<int?> getRowCount() async {
     final Database db = await initDatabase();

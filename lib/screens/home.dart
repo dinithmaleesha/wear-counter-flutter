@@ -181,7 +181,7 @@ class _HomeState extends State<Home> {
             ListTile(
               title: const Text('Update'),
               onTap: () {
-                // TODO:
+                _openUpdateClothDialog(cloth);
               },
             ),
             ListTile(
@@ -202,6 +202,147 @@ class _HomeState extends State<Home> {
     if (rowDeleted != -1) {
       showCustomToast('Cloth Deleted!');
       _fetchClothItems();
+    }
+  }
+
+  void _openUpdateClothDialog(Cloth cloth) {
+    String newClothName = cloth.name;
+    int newWearCount = cloth.wearCount;
+    File? image = File(cloth.imagePath);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Update Cloth'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Select Image'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(Icons.photo_library),
+                                    title: const Text('Pick from gallery'),
+                                    onTap: () async {
+                                      final pickedFile = await ImagePicker()
+                                          .pickImage(
+                                              source: ImageSource.gallery);
+                                      if (pickedFile != null) {
+                                        setState(() {
+                                          image = File(pickedFile.path);
+                                        });
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.camera_alt),
+                                    title: const Text('Take a picture'),
+                                    onTap: () async {
+                                      final pickedFile = await ImagePicker()
+                                          .pickImage(
+                                              source: ImageSource.camera);
+                                      if (pickedFile != null) {
+                                        setState(() {
+                                          image = File(pickedFile.path);
+                                        });
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: image != null
+                            ? Image.file(image!, fit: BoxFit.cover)
+                            : const Center(
+                                child: Icon(Icons.camera_alt, size: 50),
+                              ),
+                      ),
+                    ),
+                    TextFormField(
+                      initialValue: newClothName,
+                      decoration: const InputDecoration(
+                        hintText: 'Cloth Name',
+                      ),
+                      onChanged: (val) {
+                        newClothName = val;
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: newWearCount.toString(),
+                      decoration: const InputDecoration(
+                        hintText: 'Wear Count',
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (val) {
+                        newWearCount = int.tryParse(val) ?? 1;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Update'),
+                  onPressed: () async {
+                    if (newClothName.isNotEmpty) {
+                      await _updateCloth(cloth.id!, newClothName,
+                          image?.path ?? cloth.imagePath, newWearCount);
+                      Navigator.of(context).pop();
+                    } else {
+                      showCustomToast('Please enter cloth name.');
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _updateCloth(
+      int id, String newName, String imagePath, int newWearCount) async {
+    int updateId = await _dbHelper.updateClothingItem(Cloth(
+      id: id,
+      name: newName,
+      imagePath: imagePath,
+      wearCount: newWearCount,
+      currentWears: 0,
+    ));
+    if (updateId != -1) {
+      showCustomToast('Cloth details updated.');
+      _fetchClothItems();
+      Navigator.pop(context);
     }
   }
 
