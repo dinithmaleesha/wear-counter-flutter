@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
@@ -10,3 +11,14 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Color.fromRGBO(63, 81, 181, 1), width: 2.0),
   ),
 );
+
+void showCustomToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.black.withOpacity(0.7),
+    textColor: Colors.white,
+  );
+}
