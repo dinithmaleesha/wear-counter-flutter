@@ -119,6 +119,14 @@ class _HomeState extends State<Home> {
                       onChanged: (val) {
                         newClothName = val;
                       },
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter a cloth name';
+                        } else if (val.length >= 30) {
+                          return 'Please enter a shorter cloth name';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
                       decoration: const InputDecoration(
@@ -127,6 +135,19 @@ class _HomeState extends State<Home> {
                       keyboardType: TextInputType.number,
                       onChanged: (val) {
                         newWearCount = int.tryParse(val) ?? 1;
+                      },
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter a wear count';
+                        } else {
+                          final parsedValue = int.tryParse(val);
+                          if (parsedValue == null) {
+                            return 'Please enter a valid number';
+                          } else if (parsedValue > 10) {
+                            return 'Please wash your clothes';
+                          }
+                        }
+                        return null;
                       },
                     ),
                   ],
@@ -289,6 +310,14 @@ class _HomeState extends State<Home> {
                       onChanged: (val) {
                         newClothName = val;
                       },
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter a cloth name';
+                        } else if (val.length >= 10) {
+                          return 'Please enter a shorter cloth name';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
                       initialValue: newWearCount.toString(),
@@ -298,6 +327,19 @@ class _HomeState extends State<Home> {
                       keyboardType: TextInputType.number,
                       onChanged: (val) {
                         newWearCount = int.tryParse(val) ?? 1;
+                      },
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter a wear count';
+                        } else {
+                          final parsedValue = int.tryParse(val);
+                          if (parsedValue == null) {
+                            return 'Please enter a valid number';
+                          } else if (parsedValue > 10) {
+                            return 'Please wash your clothes';
+                          }
+                        }
+                        return null;
                       },
                     ),
                   ],
