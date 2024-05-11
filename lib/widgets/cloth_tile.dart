@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wear_counter/model/cloth.dart';
+import 'dart:io';
 
 class ClothTile extends StatefulWidget {
   final Cloth cloth;
@@ -43,8 +44,14 @@ class _ClothTileState extends State<ClothTile> {
         leading: Container(
           width: 64,
           height: 64,
-          color: const Color.fromRGBO(63, 81, 181, 1),
-          child: const Icon(Icons.photo, color: Colors.white),
+          child: widget.cloth.imagePath.isNotEmpty
+              ? Image.file(
+                  File(widget.cloth.imagePath),
+                  width: 64,
+                  height: 64,
+                  fit: BoxFit.cover,
+                )
+              : const Icon(Icons.photo, color: Colors.white),
         ),
         title: Text(widget.cloth.name),
         subtitle: Text(
