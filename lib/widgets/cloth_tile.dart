@@ -52,52 +52,64 @@ class _ClothTileState extends State<ClothTile> {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: ListTile(
-        leading: Container(
-          width: 64,
-          height: 64,
-          child: widget.cloth.imagePath.isNotEmpty
-              ? Image.file(
-                  File(widget.cloth.imagePath),
-                  width: 64,
-                  height: 64,
-                  fit: BoxFit.cover,
-                )
-              : const Icon(Icons.photo, color: Colors.white),
-        ),
-        title: Text(widget.cloth.name),
-        subtitle: Text(
-          'Worn: $_currentWears / ${widget.cloth.wearCount}',
-          style: const TextStyle(fontSize: 12),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                setState(() {
-                  _currentWears = 0;
-                });
-                widget.onReset();
-              },
-              tooltip: 'Rest Wear Count',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: Container(
+              width: 64,
+              height: 64,
+              child: widget.cloth.imagePath.isNotEmpty
+                  ? Image.file(
+                      File(widget.cloth.imagePath),
+                      width: 64,
+                      height: 64,
+                      fit: BoxFit.cover,
+                    )
+                  : const Icon(Icons.photo, color: Colors.white),
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.remove),
-              onPressed: _decrementWearCount,
-              tooltip: 'Decrement Wear Count',
+            title: Text(widget.cloth.name),
+            subtitle: Text(
+              'Worn: $_currentWears / ${widget.cloth.wearCount}',
+              style: const TextStyle(fontSize: 12),
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.add),
-              onPressed: _incrementWearCount,
-              tooltip: 'Increment Wear Count',
+          ),
+          Container(
+            color: const Color.fromRGBO(63, 81, 181, 0.5),
+            margin: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.refresh),
+                  color: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      _currentWears = 0;
+                    });
+                    widget.onReset();
+                  },
+                  tooltip: 'Reset Wear Count',
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.remove),
+                  color: Colors.white,
+                  onPressed: _decrementWearCount,
+                  tooltip: 'Decrement Wear Count',
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.add),
+                  color: Colors.white,
+                  onPressed: _incrementWearCount,
+                  tooltip: 'Increment Wear Count',
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
