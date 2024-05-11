@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wear_counter/model/cloth.dart';
+import 'package:wear_counter/shared/constants.dart';
 import 'package:wear_counter/widgets/cloth_tile.dart';
 import 'package:wear_counter/db/db_helper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -157,15 +158,8 @@ class _HomeState extends State<Home> {
                       }
                       Navigator.of(context).pop();
                     } else {
-                      print('Please select an image and enter cloth name.');
-                      Fluttertoast.showToast(
-                        msg: 'Please select an image and enter cloth name.',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                      );
+                      showCustomToast(
+                          'Please select an image and enter cloth name.');
                     }
                   },
                 ),
@@ -206,7 +200,7 @@ class _HomeState extends State<Home> {
   Future<void> _deleteCloth(BuildContext context, Cloth cloth) async {
     int rowDeleted = await _dbHelper.deleteClothingItem(cloth.id!);
     if (rowDeleted != -1) {
-      print('Cloth Deleted!');
+      showCustomToast('Cloth Deleted!');
       _fetchClothItems();
     }
   }
