@@ -177,6 +177,40 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _showUpdateDeleteOptions(BuildContext context, Cloth cloth) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: const Text('Update'),
+              onTap: () {
+                // TODO:
+              },
+            ),
+            ListTile(
+              title: const Text('Delete'),
+              onTap: () {
+                _deleteCloth(context, cloth);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteCloth(BuildContext context, Cloth cloth) async {
+    int rowDeleted = await _dbHelper.deleteClothingItem(cloth.id!);
+    if (rowDeleted != -1) {
+      print('Cloth Deleted!');
+      _fetchClothItems();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,20 +244,25 @@ class _HomeState extends State<Home> {
               itemCount: clothList.length,
               itemBuilder: (context, index) {
                 final cloth = clothList[index];
-                return ClothTile(
-                  cloth: cloth,
-                  onIncrement: () {
-                    if (cloth.currentWears < cloth.wearCount) {
+                return GestureDetector(
+                  onLongPress: () {
+                    _showUpdateDeleteOptions(context, cloth);
+                  },
+                  child: ClothTile(
+                    cloth: cloth,
+                    onIncrement: () {
+                      if (cloth.currentWears < cloth.wearCount) {
+                        setState(() {
+                          cloth.currentWears++;
+                        });
+                      }
+                    },
+                    onReset: () {
                       setState(() {
-                        cloth.currentWears++;
+                        cloth.currentWears = 0;
                       });
-                    }
-                  },
-                  onReset: () {
-                    setState(() {
-                      cloth.currentWears = 0;
-                    });
-                  },
+                    },
+                  ),
                 );
               },
             ),
