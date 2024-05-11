@@ -1,12 +1,12 @@
 class Cloth {
-  final int id;
+  int? id;
   final String name;
   final String imagePath;
   final int wearCount;
   int _currentWears;
 
   Cloth({
-    required this.id,
+    this.id,
     required this.name,
     required this.imagePath,
     required this.wearCount,
