@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:wear_counter/model/cloth.dart';
 
 class DBHelper {
+  // create database
   Future<Database> initDatabase() async {
     final path = await getDatabasesPath();
     return openDatabase(
@@ -16,6 +17,7 @@ class DBHelper {
     );
   }
 
+  // get Database path
   Future<String> getDatabasePath() async {
     final directory = await getDatabasesPath();
     final path = join(directory, 'wear_counter.db');
@@ -33,7 +35,7 @@ class DBHelper {
     );
   }
 
-  // get
+  // get all
   Future<List<Cloth>> getClothingItems() async {
     final Database db = await initDatabase();
     final List<Map<String, dynamic>> maps = await db.query('clothing_items');
@@ -48,6 +50,17 @@ class DBHelper {
     });
   }
 
+  // delete by id
+  Future<int> deleteClothingItem(int id) async {
+    final Database db = await initDatabase();
+    return await db.delete(
+      'clothing_items',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // get row count
   Future<int?> getRowCount() async {
     final Database db = await initDatabase();
     final List<Map<String, dynamic>> result =
@@ -56,6 +69,7 @@ class DBHelper {
     return count;
   }
 
+  // print all rows
   Future<void> printAllRows() async {
     final Database database = await initDatabase();
     List<Map<String, dynamic>> rows = await database.query('clothing_items');
