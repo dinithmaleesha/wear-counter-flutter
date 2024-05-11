@@ -8,7 +8,6 @@ import 'package:wear_counter/shared/constants.dart';
 import 'package:wear_counter/widgets/cloth_tile.dart';
 import 'package:wear_counter/db/db_helper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
