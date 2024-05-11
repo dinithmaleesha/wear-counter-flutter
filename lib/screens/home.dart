@@ -385,17 +385,29 @@ class _HomeState extends State<Home> {
                   },
                   child: ClothTile(
                     cloth: cloth,
-                    onIncrement: () {
+                    onIncrement: () async {
                       if (cloth.currentWears < cloth.wearCount) {
                         setState(() {
                           cloth.currentWears++;
                         });
+                        await _dbHelper.updateClothCurrentWears(
+                            cloth.id!, cloth.currentWears);
                       }
                     },
-                    onReset: () {
+                    onDecrement: () async {
+                      if (cloth.currentWears != 0) {
+                        setState(() {
+                          cloth.currentWears--;
+                        });
+                        await _dbHelper.updateClothCurrentWears(
+                            cloth.id!, cloth.currentWears);
+                      }
+                    },
+                    onReset: () async {
                       setState(() {
                         cloth.currentWears = 0;
                       });
+                      await _dbHelper.updateClothCurrentWears(cloth.id!, 0);
                     },
                   ),
                 );

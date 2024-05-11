@@ -71,6 +71,17 @@ class DBHelper {
     );
   }
 
+  // update CurrentWears count
+  Future<void> updateClothCurrentWears(int clothId, int currentWears) async {
+    final Database db = await initDatabase();
+    await db.update(
+      'clothing_items',
+      {'currentWears': currentWears},
+      where: 'id = ?',
+      whereArgs: [clothId],
+    );
+  }
+
   // get row count
   Future<int?> getRowCount() async {
     final Database db = await initDatabase();
