@@ -4,6 +4,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 const textInputDecoration = InputDecoration(
   fillColor: tileSecondColor,
   filled: true,
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: customRed),
+  ),
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(color: Colors.white),
   ),
@@ -12,6 +15,7 @@ const textInputDecoration = InputDecoration(
   ),
   hintStyle: TextStyle(color: Colors.white54),
   labelStyle: TextStyle(color: Colors.white),
+  errorStyle: TextStyle(color: customRed),
 );
 
 void showCustomToast(String message) {
@@ -29,3 +33,4 @@ void showCustomToast(String message) {
 const Color mainColor = Color.fromRGBO(0, 43, 56, 1);
 const Color tileColor = Color.fromRGBO(1, 64, 82, 1);
 const Color tileSecondColor = Color.fromRGBO(0, 118, 131, 1);
+const Color customRed = Color.fromRGBO(254, 57, 95, 1);

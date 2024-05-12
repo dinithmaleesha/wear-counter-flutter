@@ -20,6 +20,7 @@ class _HomeState extends State<Home> {
   final _formKey = GlobalKey<FormState>();
   List<Cloth> clothList = [];
   bool isLoading = true;
+  String? error;
 
   @override
   void initState() {
@@ -146,10 +147,9 @@ class _HomeState extends State<Home> {
                         },
                         validator: (val) {
                           if (val!.isEmpty) {
-                            showCustomToast('Please enter a cloth name');
+                            return 'Please enter a cloth name';
                           } else if (val.length >= 30) {
-                            showCustomToast(
-                                'Please enter a shorter cloth name');
+                            return 'Please enter a shorter cloth name';
                           }
                           return null;
                         },
@@ -158,19 +158,20 @@ class _HomeState extends State<Home> {
                         height: 10,
                       ),
                       TextFormField(
+                        initialValue: '1',
                         decoration: textInputDecoration.copyWith(
                             hintText: 'Wear Count'),
                         style: const TextStyle(color: Colors.white),
                         keyboardType: TextInputType.number,
                         validator: (val) {
                           if (val!.isEmpty) {
-                            showCustomToast('Please enter a wear count');
+                            return 'Please enter a wear count';
                           } else {
                             final parsedValue = int.tryParse(val);
-                            if (parsedValue == null) {
-                              showCustomToast('Please enter a valid number');
+                            if (parsedValue! <= 0) {
+                              return 'Please enter a positive number';
                             } else if (parsedValue > 10) {
-                              showCustomToast('Please wash your clothes');
+                              return 'Consider washing this cloth soon.';
                             }
                           }
                           return null;
@@ -370,17 +371,17 @@ class _HomeState extends State<Home> {
                       TextFormField(
                         initialValue: newClothName,
                         decoration: textInputDecoration.copyWith(
-                            hintText: 'Cloth Name'),
+                          hintText: 'Cloth Name',
+                        ),
                         style: const TextStyle(color: Colors.white),
                         onChanged: (val) {
                           newClothName = val;
                         },
                         validator: (val) {
                           if (val!.isEmpty) {
-                            showCustomToast('Please enter a cloth name');
-                          } else if (val.length >= 10) {
-                            showCustomToast(
-                                'Please enter a shorter cloth name');
+                            return 'Please enter a cloth name';
+                          } else if (val.length >= 30) {
+                            return 'Please enter a shorter cloth name';
                           }
                           return null;
                         },
@@ -399,13 +400,13 @@ class _HomeState extends State<Home> {
                         },
                         validator: (val) {
                           if (val!.isEmpty) {
-                            showCustomToast('Please enter a wear count');
+                            return 'Please enter a wear count';
                           } else {
                             final parsedValue = int.tryParse(val);
-                            if (parsedValue == null) {
-                              showCustomToast('Please enter a valid number');
+                            if (parsedValue! <= 0) {
+                              return 'Please enter a positive number';
                             } else if (parsedValue > 10) {
-                              showCustomToast('Please wash your clothes');
+                              return 'Consider washing this cloth soon.';
                             }
                           }
                           return null;
@@ -501,43 +502,48 @@ class _HomeState extends State<Home> {
                     style: TextStyle(fontSize: 20, color: Colors.white10),
                   ),
                 )
-              : ListView.builder(
-                  itemCount: clothList.length,
-                  itemBuilder: (context, index) {
-                    final cloth = clothList[index];
-                    return GestureDetector(
-                      onLongPress: () {
-                        _showUpdateDeleteOptions(context, cloth);
-                      },
-                      child: ClothTile(
-                        cloth: cloth,
-                        onIncrement: () async {
-                          if (cloth.currentWears < cloth.wearCount) {
+              : GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: tileColor,
+                  child: ListView.builder(
+                    itemCount: clothList.length,
+                    itemBuilder: (context, index) {
+                      final cloth = clothList[index];
+                      return GestureDetector(
+                        onLongPress: () {
+                          _showUpdateDeleteOptions(context, cloth);
+                        },
+                        child: ClothTile(
+                          cloth: cloth,
+                          onIncrement: () async {
+                            if (cloth.currentWears < cloth.wearCount) {
+                              setState(() {
+                                cloth.currentWears++;
+                              });
+                              await _dbHelper.updateClothCurrentWears(
+                                  cloth.id!, cloth.currentWears);
+                            }
+                          },
+                          onDecrement: () async {
+                            if (cloth.currentWears != 0) {
+                              setState(() {
+                                cloth.currentWears--;
+                              });
+                              await _dbHelper.updateClothCurrentWears(
+                                  cloth.id!, cloth.currentWears);
+                            }
+                          },
+                          onReset: () async {
                             setState(() {
-                              cloth.currentWears++;
+                              cloth.currentWears = 0;
                             });
                             await _dbHelper.updateClothCurrentWears(
-                                cloth.id!, cloth.currentWears);
-                          }
-                        },
-                        onDecrement: () async {
-                          if (cloth.currentWears != 0) {
-                            setState(() {
-                              cloth.currentWears--;
-                            });
-                            await _dbHelper.updateClothCurrentWears(
-                                cloth.id!, cloth.currentWears);
-                          }
-                        },
-                        onReset: () async {
-                          setState(() {
-                            cloth.currentWears = 0;
-                          });
-                          await _dbHelper.updateClothCurrentWears(cloth.id!, 0);
-                        },
-                      ),
-                    );
-                  },
+                                cloth.id!, 0);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
     );
   }
