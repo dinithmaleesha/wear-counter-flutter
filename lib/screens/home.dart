@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final DBHelper _dbHelper = DBHelper();
   List<Cloth> clothList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _HomeState extends State<Home> {
     print('Number of cloth items fetched: ${cloths.length}');
     setState(() {
       clothList = cloths;
+      isLoading = false;
     });
   }
 
@@ -38,7 +40,7 @@ class _HomeState extends State<Home> {
   void _showAddClothDialog() {
     String newClothName = '';
     int newWearCount = 1;
-    File? _image;
+    File? image;
 
     showDialog(
       context: context,
@@ -70,7 +72,7 @@ class _HomeState extends State<Home> {
                                               source: ImageSource.gallery);
                                       if (pickedFile != null) {
                                         setState(() {
-                                          _image = File(pickedFile.path);
+                                          image = File(pickedFile.path);
                                         });
                                         Navigator.of(context).pop();
                                       }
@@ -85,7 +87,7 @@ class _HomeState extends State<Home> {
                                               source: ImageSource.camera);
                                       if (pickedFile != null) {
                                         setState(() {
-                                          _image = File(pickedFile.path);
+                                          image = File(pickedFile.path);
                                         });
                                         Navigator.of(context).pop();
                                       }
@@ -104,8 +106,8 @@ class _HomeState extends State<Home> {
                           color: Colors.grey[200],
                           border: Border.all(color: Colors.grey),
                         ),
-                        child: _image != null
-                            ? Image.file(_image!, fit: BoxFit.cover)
+                        child: image != null
+                            ? Image.file(image!, fit: BoxFit.cover)
                             : const Center(
                                 child: Icon(Icons.camera_alt, size: 50),
                               ),
@@ -162,11 +164,11 @@ class _HomeState extends State<Home> {
                 TextButton(
                   child: const Text('Add'),
                   onPressed: () async {
-                    if (_image != null && newClothName.isNotEmpty) {
+                    if (image != null && newClothName.isNotEmpty) {
                       // Perform insertion logic with image
                       int insertedId = await _dbHelper.insertClothingItem(Cloth(
                         name: newClothName,
-                        imagePath: _image!.path,
+                        imagePath: image!.path,
                         wearCount: newWearCount,
                         currentWears: 0,
                       ));
@@ -409,51 +411,55 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: clothList.isEmpty
+      body: isLoading
           ? const Center(
-              child: Text(
-                'Add cloth',
-                style: TextStyle(fontSize: 20),
-              ),
+              child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: clothList.length,
-              itemBuilder: (context, index) {
-                final cloth = clothList[index];
-                return GestureDetector(
-                  onLongPress: () {
-                    _showUpdateDeleteOptions(context, cloth);
-                  },
-                  child: ClothTile(
-                    cloth: cloth,
-                    onIncrement: () async {
-                      if (cloth.currentWears < cloth.wearCount) {
-                        setState(() {
-                          cloth.currentWears++;
-                        });
-                        await _dbHelper.updateClothCurrentWears(
-                            cloth.id!, cloth.currentWears);
-                      }
-                    },
-                    onDecrement: () async {
-                      if (cloth.currentWears != 0) {
-                        setState(() {
-                          cloth.currentWears--;
-                        });
-                        await _dbHelper.updateClothCurrentWears(
-                            cloth.id!, cloth.currentWears);
-                      }
-                    },
-                    onReset: () async {
-                      setState(() {
-                        cloth.currentWears = 0;
-                      });
-                      await _dbHelper.updateClothCurrentWears(cloth.id!, 0);
-                    },
+          : clothList.isEmpty
+              ? const Center(
+                  child: Text(
+                    'Add cloth',
+                    style: TextStyle(fontSize: 20),
                   ),
-                );
-              },
-            ),
+                )
+              : ListView.builder(
+                  itemCount: clothList.length,
+                  itemBuilder: (context, index) {
+                    final cloth = clothList[index];
+                    return GestureDetector(
+                      onLongPress: () {
+                        _showUpdateDeleteOptions(context, cloth);
+                      },
+                      child: ClothTile(
+                        cloth: cloth,
+                        onIncrement: () async {
+                          if (cloth.currentWears < cloth.wearCount) {
+                            setState(() {
+                              cloth.currentWears++;
+                            });
+                            await _dbHelper.updateClothCurrentWears(
+                                cloth.id!, cloth.currentWears);
+                          }
+                        },
+                        onDecrement: () async {
+                          if (cloth.currentWears != 0) {
+                            setState(() {
+                              cloth.currentWears--;
+                            });
+                            await _dbHelper.updateClothCurrentWears(
+                                cloth.id!, cloth.currentWears);
+                          }
+                        },
+                        onReset: () async {
+                          setState(() {
+                            cloth.currentWears = 0;
+                          });
+                          await _dbHelper.updateClothCurrentWears(cloth.id!, 0);
+                        },
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }
