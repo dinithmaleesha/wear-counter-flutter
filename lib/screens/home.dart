@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final DBHelper _dbHelper = DBHelper();
+  final _formKey = GlobalKey<FormState>();
   List<Cloth> clothList = [];
   bool isLoading = true;
 
@@ -54,122 +55,132 @@ class _HomeState extends State<Home> {
               ),
               backgroundColor: tileSecondColor,
               content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Select Image',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              backgroundColor: tileSecondColor,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ListTile(
-                                    leading: const Icon(Icons.photo_library),
-                                    title: const Text(
-                                      'Pick from gallery',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onTap: () async {
-                                      final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.gallery);
-                                      if (pickedFile != null) {
-                                        setState(() {
-                                          image = File(pickedFile.path);
-                                        });
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.camera_alt),
-                                    title: const Text(
-                                      'Take a picture',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onTap: () async {
-                                      final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.camera);
-                                      if (pickedFile != null) {
-                                        setState(() {
-                                          image = File(pickedFile.path);
-                                        });
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: tileColor,
-                          border: Border.all(color: Colors.white),
-                        ),
-                        child: image != null
-                            ? Image.file(image!, fit: BoxFit.cover)
-                            : const Center(
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  size: 50,
-                                  color: Colors.white,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Select Image',
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                              ),
+                                backgroundColor: tileSecondColor,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library),
+                                      title: const Text(
+                                        'Pick from gallery',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onTap: () async {
+                                        final pickedFile = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.gallery);
+                                        if (pickedFile != null) {
+                                          setState(() {
+                                            image = File(pickedFile.path);
+                                          });
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text(
+                                        'Take a picture',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onTap: () async {
+                                        final pickedFile = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.camera);
+                                        if (pickedFile != null) {
+                                          setState(() {
+                                            image = File(pickedFile.path);
+                                          });
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: tileColor,
+                            border: Border.all(color: Colors.white),
+                          ),
+                          child: image != null
+                              ? Image.file(image!, fit: BoxFit.cover)
+                              : const Center(
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    size: 50,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                        ),
                       ),
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Cloth Name',
+                      const SizedBox(
+                        height: 10,
                       ),
-                      onChanged: (val) {
-                        newClothName = val;
-                      },
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Please enter a cloth name';
-                        } else if (val.length >= 30) {
-                          return 'Please enter a shorter cloth name';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Wear Count',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (val) {
-                        newWearCount = int.tryParse(val) ?? 1;
-                      },
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Please enter a wear count';
-                        } else {
-                          final parsedValue = int.tryParse(val);
-                          if (parsedValue == null) {
-                            return 'Please enter a valid number';
-                          } else if (parsedValue > 10) {
-                            return 'Please wash your clothes';
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Cloth Name'),
+                        style: const TextStyle(color: Colors.white),
+                        onChanged: (val) {
+                          newClothName = val;
+                        },
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            showCustomToast('Please enter a cloth name');
+                          } else if (val.length >= 30) {
+                            showCustomToast(
+                                'Please enter a shorter cloth name');
                           }
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Wear Count'),
+                        style: const TextStyle(color: Colors.white),
+                        keyboardType: TextInputType.number,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            showCustomToast('Please enter a wear count');
+                          } else {
+                            final parsedValue = int.tryParse(val);
+                            if (parsedValue == null) {
+                              showCustomToast('Please enter a valid number');
+                            } else if (parsedValue > 10) {
+                              showCustomToast('Please wash your clothes');
+                            }
+                          }
+                          return null;
+                        },
+                        onChanged: (val) {
+                          newWearCount = int.tryParse(val) ?? 1;
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: <Widget>[
@@ -188,24 +199,25 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    if (image != null && newClothName.isNotEmpty) {
-                      // Perform insertion logic with image
-                      int insertedId = await _dbHelper.insertClothingItem(Cloth(
-                        name: newClothName,
-                        imagePath: image!.path,
-                        wearCount: newWearCount,
-                        currentWears: 0,
-                      ));
-                      if (insertedId != -1) {
-                        _fetchClothItems();
-                        print('Cloth inserted with id: $insertedId');
+                    if (_formKey.currentState!.validate()) {
+                      if (image != null) {
+                        int insertedId =
+                            await _dbHelper.insertClothingItem(Cloth(
+                          name: newClothName,
+                          imagePath: image!.path,
+                          wearCount: newWearCount,
+                          currentWears: 0,
+                        ));
+                        if (insertedId != -1) {
+                          _fetchClothItems();
+                          print('Cloth inserted with id: $insertedId');
+                        } else {
+                          print('Failed to insert cloth into database');
+                        }
+                        Navigator.of(context).pop();
                       } else {
-                        print('Failed to insert cloth into database');
+                        showCustomToast('Please select a image');
                       }
-                      Navigator.of(context).pop();
-                    } else {
-                      showCustomToast(
-                          'Please select an image and enter cloth name.');
                     }
                   },
                 ),
@@ -277,120 +289,130 @@ class _HomeState extends State<Home> {
               ),
               backgroundColor: tileSecondColor,
               content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Select Image',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              backgroundColor: tileSecondColor,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ListTile(
-                                    leading: const Icon(Icons.photo_library),
-                                    title: const Text(
-                                      'Pick from gallery',
-                                      style: TextStyle(color: Colors.white),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Select Image',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: tileSecondColor,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library),
+                                      title: const Text(
+                                        'Pick from gallery',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onTap: () async {
+                                        final pickedFile = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.gallery);
+                                        if (pickedFile != null) {
+                                          setState(() {
+                                            image = File(pickedFile.path);
+                                          });
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
                                     ),
-                                    onTap: () async {
-                                      final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.gallery);
-                                      if (pickedFile != null) {
-                                        setState(() {
-                                          image = File(pickedFile.path);
-                                        });
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.camera_alt),
-                                    title: const Text(
-                                      'Take a picture',
-                                      style: TextStyle(color: Colors.white),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text(
+                                        'Take a picture',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onTap: () async {
+                                        final pickedFile = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.camera);
+                                        if (pickedFile != null) {
+                                          setState(() {
+                                            image = File(pickedFile.path);
+                                          });
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
                                     ),
-                                    onTap: () async {
-                                      final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.camera);
-                                      if (pickedFile != null) {
-                                        setState(() {
-                                          image = File(pickedFile.path);
-                                        });
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.grey),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: image != null
+                              ? Image.file(image!, fit: BoxFit.cover)
+                              : const Center(
+                                  child: Icon(Icons.camera_alt, size: 50),
+                                ),
                         ),
-                        child: image != null
-                            ? Image.file(image!, fit: BoxFit.cover)
-                            : const Center(
-                                child: Icon(Icons.camera_alt, size: 50),
-                              ),
                       ),
-                    ),
-                    TextFormField(
-                      initialValue: newClothName,
-                      decoration: const InputDecoration(
-                        hintText: 'Cloth Name',
+                      const SizedBox(
+                        height: 10,
                       ),
-                      onChanged: (val) {
-                        newClothName = val;
-                      },
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Please enter a cloth name';
-                        } else if (val.length >= 10) {
-                          return 'Please enter a shorter cloth name';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: newWearCount.toString(),
-                      decoration: const InputDecoration(
-                        hintText: 'Wear Count',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (val) {
-                        newWearCount = int.tryParse(val) ?? 1;
-                      },
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Please enter a wear count';
-                        } else {
-                          final parsedValue = int.tryParse(val);
-                          if (parsedValue == null) {
-                            return 'Please enter a valid number';
-                          } else if (parsedValue > 10) {
-                            return 'Please wash your clothes';
+                      TextFormField(
+                        initialValue: newClothName,
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Cloth Name'),
+                        style: const TextStyle(color: Colors.white),
+                        onChanged: (val) {
+                          newClothName = val;
+                        },
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            showCustomToast('Please enter a cloth name');
+                          } else if (val.length >= 10) {
+                            showCustomToast(
+                                'Please enter a shorter cloth name');
                           }
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        initialValue: newWearCount.toString(),
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Wear Count'),
+                        style: const TextStyle(color: Colors.white),
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          newWearCount = int.tryParse(val) ?? 1;
+                        },
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            showCustomToast('Please enter a wear count');
+                          } else {
+                            final parsedValue = int.tryParse(val);
+                            if (parsedValue == null) {
+                              showCustomToast('Please enter a valid number');
+                            } else if (parsedValue > 10) {
+                              showCustomToast('Please wash your clothes');
+                            }
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: <Widget>[
@@ -409,12 +431,14 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    if (newClothName.isNotEmpty) {
-                      await _updateCloth(cloth.id!, newClothName,
-                          image?.path ?? cloth.imagePath, newWearCount);
-                      Navigator.of(context).pop();
-                    } else {
-                      showCustomToast('Please enter cloth name.');
+                    if (_formKey.currentState!.validate()) {
+                      if (image != null) {
+                        await _updateCloth(cloth.id!, newClothName,
+                            image?.path ?? cloth.imagePath, newWearCount);
+                        Navigator.of(context).pop();
+                      } else {
+                        showCustomToast('Please select a image');
+                      }
                     }
                   },
                 ),

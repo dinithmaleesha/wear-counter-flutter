@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 const textInputDecoration = InputDecoration(
-  fillColor: Colors.white,
+  fillColor: tileSecondColor,
   filled: true,
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white, width: 2.0),
+    borderSide: BorderSide(color: Colors.white),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color.fromRGBO(63, 81, 181, 1), width: 2.0),
+    borderSide: BorderSide(color: tileColor, width: 2.0),
   ),
+  hintStyle: TextStyle(color: Colors.white54),
+  labelStyle: TextStyle(color: Colors.white),
 );
 
 void showCustomToast(String message) {
@@ -18,7 +20,8 @@ void showCustomToast(String message) {
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
-    backgroundColor: Colors.black.withOpacity(0.7),
+    // backgroundColor: Colors.black.withOpacity(0.7),
+    backgroundColor: tileColor,
     textColor: Colors.white,
   );
 }
