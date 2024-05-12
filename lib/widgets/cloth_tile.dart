@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wear_counter/model/cloth.dart';
 import 'dart:io';
 
+import 'package:wear_counter/shared/constants.dart';
+
 class ClothTile extends StatefulWidget {
   final Cloth cloth;
   final VoidCallback onIncrement;
@@ -51,6 +53,8 @@ class _ClothTileState extends State<ClothTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: tileColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,14 +72,17 @@ class _ClothTileState extends State<ClothTile> {
                     )
                   : const Icon(Icons.photo, color: Colors.white),
             ),
-            title: Text(widget.cloth.name),
+            title: Text(
+              widget.cloth.name,
+              style: const TextStyle(color: Colors.white),
+            ),
             subtitle: Text(
               'Worn: $_currentWears / ${widget.cloth.wearCount}',
-              style: const TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
           ),
           Container(
-            color: const Color.fromRGBO(63, 81, 181, 0.5),
+            color: tileSecondColor,
             margin: const EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

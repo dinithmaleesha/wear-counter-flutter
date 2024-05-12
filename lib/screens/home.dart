@@ -48,7 +48,11 @@ class _HomeState extends State<Home> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Add New Cloth'),
+              title: const Text(
+                'Add New Cloth',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: tileSecondColor,
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -59,13 +63,20 @@ class _HomeState extends State<Home> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Select Image'),
+                              title: const Text(
+                                'Select Image',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: tileSecondColor,
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   ListTile(
                                     leading: const Icon(Icons.photo_library),
-                                    title: const Text('Pick from gallery'),
+                                    title: const Text(
+                                      'Pick from gallery',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                     onTap: () async {
                                       final pickedFile = await ImagePicker()
                                           .pickImage(
@@ -80,7 +91,10 @@ class _HomeState extends State<Home> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.camera_alt),
-                                    title: const Text('Take a picture'),
+                                    title: const Text(
+                                      'Take a picture',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                     onTap: () async {
                                       final pickedFile = await ImagePicker()
                                           .pickImage(
@@ -103,13 +117,17 @@ class _HomeState extends State<Home> {
                         width: double.infinity,
                         height: 200,
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.grey),
+                          color: tileColor,
+                          border: Border.all(color: Colors.white),
                         ),
                         child: image != null
                             ? Image.file(image!, fit: BoxFit.cover)
                             : const Center(
-                                child: Icon(Icons.camera_alt, size: 50),
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
                               ),
                       ),
                     ),
@@ -156,13 +174,19 @@ class _HomeState extends State<Home> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: const Text('Add'),
+                  child: const Text(
+                    'Add',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onPressed: () async {
                     if (image != null && newClothName.isNotEmpty) {
                       // Perform insertion logic with image
@@ -197,23 +221,32 @@ class _HomeState extends State<Home> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              title: const Text('Update'),
-              onTap: () {
-                _openUpdateClothDialog(cloth);
-              },
-            ),
-            ListTile(
-              title: const Text('Delete'),
-              onTap: () {
-                _deleteCloth(context, cloth);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        return Container(
+          color: tileSecondColor,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: const Text(
+                  'Update',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  _openUpdateClothDialog(cloth);
+                },
+              ),
+              ListTile(
+                title: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  _deleteCloth(context, cloth);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -238,7 +271,11 @@ class _HomeState extends State<Home> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Update Cloth'),
+              title: const Text(
+                'Update Cloth',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: tileSecondColor,
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -249,13 +286,20 @@ class _HomeState extends State<Home> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Select Image'),
+                              title: const Text(
+                                'Select Image',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: tileSecondColor,
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   ListTile(
                                     leading: const Icon(Icons.photo_library),
-                                    title: const Text('Pick from gallery'),
+                                    title: const Text(
+                                      'Pick from gallery',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                     onTap: () async {
                                       final pickedFile = await ImagePicker()
                                           .pickImage(
@@ -270,7 +314,10 @@ class _HomeState extends State<Home> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.camera_alt),
-                                    title: const Text('Take a picture'),
+                                    title: const Text(
+                                      'Take a picture',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                     onTap: () async {
                                       final pickedFile = await ImagePicker()
                                           .pickImage(
@@ -348,13 +395,19 @@ class _HomeState extends State<Home> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: const Text('Update'),
+                  child: const Text(
+                    'Update',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onPressed: () async {
                     if (newClothName.isNotEmpty) {
                       await _updateCloth(cloth.id!, newClothName,
@@ -399,7 +452,8 @@ class _HomeState extends State<Home> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color.fromRGBO(63, 81, 181, 1),
+        backgroundColor: mainColor,
+        elevation: 0.0,
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -411,6 +465,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+      backgroundColor: mainColor,
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -419,7 +474,7 @@ class _HomeState extends State<Home> {
               ? const Center(
                   child: Text(
                     'Add cloth',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: Colors.white10),
                   ),
                 )
               : ListView.builder(

@@ -22,3 +22,7 @@ void showCustomToast(String message) {
     textColor: Colors.white,
   );
 }
+
+const Color mainColor = Color.fromRGBO(0, 43, 56, 1);
+const Color tileColor = Color.fromRGBO(1, 64, 82, 1);
+const Color tileSecondColor = Color.fromRGBO(0, 118, 131, 1);
