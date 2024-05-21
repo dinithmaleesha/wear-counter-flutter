@@ -13,6 +13,7 @@ class Cloth {
     required int currentWears,
   }) : _currentWears = currentWears;
 
+  // ignore: unnecessary_getters_setters
   int get currentWears => _currentWears;
 
   set currentWears(int value) {

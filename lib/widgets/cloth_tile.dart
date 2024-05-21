@@ -60,6 +60,7 @@ class _ClothTileState extends State<ClothTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
+            // ignore: sized_box_for_whitespace
             leading: Container(
               width: 64,
               height: 64,

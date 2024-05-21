@@ -95,8 +95,9 @@ class DBHelper {
   Future<void> printAllRows() async {
     final Database database = await initDatabase();
     List<Map<String, dynamic>> rows = await database.query('clothing_items');
-    rows.forEach((row) {
-      print('Row: $row');
-    });
+    // ignore: unused_local_variable
+    for (var row in rows) {
+      //print('Row: $row');
+    }
   }
 }

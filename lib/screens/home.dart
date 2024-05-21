@@ -31,7 +31,6 @@ class _HomeState extends State<Home> {
   // get all cloths
   void _fetchClothItems() async {
     List<Cloth> cloths = await _dbHelper.getClothingItems();
-    print('Number of cloth items fetched: ${cloths.length}');
     setState(() {
       clothList = cloths;
       isLoading = false;
@@ -211,9 +210,7 @@ class _HomeState extends State<Home> {
                         ));
                         if (insertedId != -1) {
                           _fetchClothItems();
-                          print('Cloth inserted with id: $insertedId');
                         } else {
-                          print('Failed to insert cloth into database');
                         }
                         Navigator.of(context).pop();
                       } else {
@@ -499,7 +496,7 @@ class _HomeState extends State<Home> {
               ? const Center(
                   child: Text(
                     'Add cloth',
-                    style: TextStyle(fontSize: 20, color: Colors.white10),
+                    style: TextStyle(fontSize: 20, color: Colors.white54),
                   ),
                 )
               : GlowingOverscrollIndicator(
